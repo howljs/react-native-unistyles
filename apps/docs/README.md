@@ -24,30 +24,34 @@ Legacy Unistyles 2.0 paths (`/start/*`, `/reference/*`, `/other/*`, `/examples/*
 
 ## Cloudflare Pages (v3)
 
-Deployed by [`.github/workflows/docs.yml`](../../.github/workflows/docs.yml) via Wrangler direct upload.
+Deployed by Cloudflare Pages **Git integration** (not GitHub Actions).
 
 | Setting | Value |
 |---------|--------|
 | Project name | `unistyles-docs` |
 | Production branch | `main` |
-| Build | `bun install --frozen-lockfile && bun run --cwd apps/docs build` |
-| Output | `apps/docs/dist` |
+| Root directory | `apps/docs` (or monorepo root — match dashboard) |
+| Build command | `npm run build` / `bun run build` (as configured in CF) |
+| Output | `dist` |
 | Custom domains | `unistyl.es`, `www.unistyl.es` |
 
-### Required GitHub secrets
+### Environment variables
 
-| Secret | Where to get it |
-|--------|-----------------|
-| `CLOUDFLARE_API_TOKEN` | [API Tokens](https://dash.cloudflare.com/profile/api-tokens) → Create Token → **Edit Cloudflare Workers** template (needs Pages:Edit) |
-| `CLOUDFLARE_ACCOUNT_ID` | Workers & Pages overview → Account ID (right sidebar) |
+**None required.** The site is fully static:
 
-Create the Pages project once (if it does not exist yet):
+- `site` is hardcoded in `astro.config.mjs` (`https://unistyl.es/v3/`)
+- Fathom analytics site id is hardcoded in `astro.config.mjs` (`DNUCGBOT`)
+- No API keys, secrets, or `import.meta.env` usage
 
-```bash
-npx wrangler@latest pages project create unistyles-docs --production-branch main
-```
+Optional build-only vars in the CF dashboard (not app secrets):
 
-Manual deploy (same as CI):
+| Name | Value | Why |
+|------|--------|-----|
+| `NODE_VERSION` | `20` | Match monorepo `engines` |
+
+Auth for deploys is the **GitHub ↔ Cloudflare** connection. You do **not** need `CLOUDFLARE_API_TOKEN` in GitHub for this path.
+
+Manual override (rare):
 
 ```bash
 bun run --cwd apps/docs build
