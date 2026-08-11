@@ -1,0 +1,5 @@
+# Old Unistyles 2.0 paths → archived v2 docs
+/start/*       https://v2.unistyl.es/start/:splat       301
+/reference/*   https://v2.unistyl.es/reference/:splat   301
+/other/*       https://v2.unistyl.es/other/:splat       301
+/examples/*    https://v2.unistyl.es/examples/:splat    301
