@@ -10,7 +10,6 @@ package com.margelo.nitro.unistyles
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
-import dalvik.annotation.optimization.FastNative
 
 
 /**
@@ -59,7 +58,6 @@ class Func_void_UnistylesNativeMiniRuntime_cxx: Func_void_UnistylesNativeMiniRun
   override fun invoke(miniRuntime: UnistylesNativeMiniRuntime): Unit
     = invoke_cxx(miniRuntime)
 
-  @FastNative
   private external fun invoke_cxx(miniRuntime: UnistylesNativeMiniRuntime): Unit
 }
 
