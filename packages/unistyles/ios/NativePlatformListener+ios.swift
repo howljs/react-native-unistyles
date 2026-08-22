@@ -1,3 +1,5 @@
+#if os(iOS)
+
 import Foundation
 import Combine
 
@@ -56,3 +58,5 @@ extension NativeIOSPlatform {
         }
     }
 }
+
+#endif

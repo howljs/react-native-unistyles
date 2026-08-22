@@ -1,5 +1,7 @@
 import Foundation
 
+#if os(iOS)
+
 extension UIColor {
     // int is universal way of color representation
     // iOS API expects UIColor, so we need to translate it
@@ -11,3 +13,5 @@ extension UIColor {
         return UIColor(red: red, green: green, blue: blue, alpha: 1.0)
     }
 }
+
+#endif

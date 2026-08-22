@@ -1,3 +1,5 @@
+#if os(iOS)
+
 import Foundation
 
 struct KeyboardAnimation {
@@ -103,3 +105,5 @@ extension NativeIOSPlatform {
         }
     }
 }
+
+#endif
