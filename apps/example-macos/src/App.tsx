@@ -10,11 +10,14 @@ import { StyleSheet, UnistylesRuntime, useUnistyles } from 'react-native-unistyl
 
 import './unistyles'
 
+let usesAccentRootBackground = false
+
 export const App = () => {
     const { rt } = useUnistyles()
     const progress = useSharedValue(0)
 
     styles.useVariants({
+        emphasized: true,
         size: 'large'
     })
 
@@ -25,6 +28,17 @@ export const App = () => {
     const animatedStyle = useAnimatedStyle(() => ({
         transform: [{ translateX: progress.value * 48 }]
     }))
+
+    const setTheme = (themeName: 'light' | 'dark') => {
+        UnistylesRuntime.setAdaptiveThemes(false)
+        UnistylesRuntime.setTheme(themeName)
+    }
+
+    const toggleRootBackground = () => {
+        usesAccentRootBackground = !usesAccentRootBackground
+
+        UnistylesRuntime.setRootViewBackgroundColor(usesAccentRootBackground ? '#dfe6e9' : undefined)
+    }
 
     return (
         <View style={styles.screen}>
@@ -48,20 +62,33 @@ export const App = () => {
                 <Text testID="font-scale-value" style={styles.value}>
                     Font scale: {rt.fontScale.toFixed(2)}
                 </Text>
+                <Text testID="adaptive-theme-value" style={styles.value}>
+                    Adaptive themes: {rt.hasAdaptiveThemes ? 'enabled' : 'disabled'}
+                </Text>
                 <Text testID="insets-value" style={styles.value}>
                     Insets: {rt.insets.top.toFixed(0)}, {rt.insets.right.toFixed(0)}, {rt.insets.bottom.toFixed(0)},{' '}
                     {rt.insets.left.toFixed(0)}
                 </Text>
                 <View testID="variant-style" style={styles.variant}>
-                    <Text style={styles.variantText}>Large variant</Text>
+                    <Text style={styles.variantText}>Compound variant</Text>
                 </View>
+                <View testID="dynamic-style" style={styles.dynamicSample(72, rt.isLandscape)} />
                 <Animated.View style={[styles.animated, animatedStyle]} />
                 <View style={styles.actions}>
-                    <Pressable style={styles.button} onPress={() => UnistylesRuntime.setTheme('light')}>
+                    <Pressable style={styles.button} onPress={() => setTheme('light')}>
                         <Text style={styles.buttonText}>Light</Text>
                     </Pressable>
-                    <Pressable style={styles.button} onPress={() => UnistylesRuntime.setTheme('dark')}>
+                    <Pressable style={styles.button} onPress={() => setTheme('dark')}>
                         <Text style={styles.buttonText}>Dark</Text>
+                    </Pressable>
+                    <Pressable
+                        style={styles.button}
+                        onPress={() => UnistylesRuntime.setAdaptiveThemes(!UnistylesRuntime.hasAdaptiveThemes)}
+                    >
+                        <Text style={styles.buttonText}>Adaptive</Text>
+                    </Pressable>
+                    <Pressable style={styles.button} onPress={toggleRootBackground}>
+                        <Text style={styles.buttonText}>Root</Text>
                     </Pressable>
                 </View>
             </View>
@@ -106,8 +133,22 @@ const styles = StyleSheet.create(theme => ({
                     paddingHorizontal: 20,
                     paddingVertical: 12
                 }
+            },
+            emphasized: {
+                true: {
+                    borderWidth: 2
+                }
             }
-        }
+        },
+        compoundVariants: [
+            {
+                size: 'large',
+                emphasized: true,
+                styles: {
+                    borderColor: theme.colors.text
+                }
+            }
+        ]
     },
     variantText: {
         color: '#ffffff',
@@ -119,8 +160,16 @@ const styles = StyleSheet.create(theme => ({
         borderRadius: 4,
         backgroundColor: theme.colors.accent
     },
+    dynamicSample: (width: number, isLandscape: boolean) => ({
+        width,
+        height: 8,
+        borderRadius: 4,
+        opacity: isLandscape ? 1 : 0.5,
+        backgroundColor: theme.colors.text
+    }),
     actions: {
         flexDirection: 'row',
+        flexWrap: 'wrap',
         gap: 12
     },
     button: {

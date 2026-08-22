@@ -45,6 +45,31 @@ xcodebuild \
   build
 ```
 
-The host currently exercises static and variant styles, manual theme changes,
-responsive breakpoints, and Reanimated styles. Platform-specific capability
-details will be kept here as the macOS implementation expands.
+The host exercises static and dynamic styles, variants and compound variants,
+manual and adaptive themes, responsive breakpoints, root-view background
+updates, runtime metrics, and Reanimated styles.
+
+## Capability matrix
+
+| Capability | macOS status | Implementation |
+|---|---|---|
+| Static and dynamic styles | Supported | Shared C++ parser and shadow registry |
+| Variants and compound variants | Supported | Shared C++ parser |
+| Manual and adaptive themes | Supported | AppKit effective appearance and shared runtime |
+| Responsive breakpoints | Supported | AppKit content-view dimensions |
+| Screen dimensions and orientation | Supported | Recomputed for resize, fullscreen, key-window, display, and backing-property changes |
+| Safe-area insets | Supported | `NSView.safeAreaInsets` |
+| Pixel ratio | Supported | `NSWindow.backingScaleFactor` |
+| Font scale | Supported | Ratio of the current AppKit system font size to the 13-point default |
+| RTL preference | Supported | AppKit layout direction plus React Native's forced-RTL preference |
+| Root-view background color | Supported | Backing layer of the React Native content view |
+| Content-size category | Not exposed by React Native macOS | Returns the neutral `Medium` fallback |
+| IME inset and animation | Not exposed by React Native macOS | Inset remains zero and no IME event is emitted |
+| Status-bar dimensions and visibility | No-op by design | Desktop windows have no mobile status bar |
+| Navigation-bar dimensions and visibility | No-op by design | Desktop windows have no Android navigation bar |
+| Immersive mode | No-op by design | The method is callable but does not alter desktop window chrome |
+
+Runtime validation covers a regular-to-compact resize and a fullscreen
+transition. Both screen metrics and breakpoints update without restarting the
+application. Moving a window between displays refreshes the pixel ratio through
+the backing-property and screen-change notifications.
