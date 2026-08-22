@@ -89,4 +89,4 @@ jobs:
         working-directory: packages/unistyles
         run: npm publish --tag macos --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
