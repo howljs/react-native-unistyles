@@ -7,7 +7,7 @@ import type { UnistylesNavigationBar } from '../NavigtionBar'
 import type { AppBreakpoint, AppTheme, AppThemeName, Color, ColorScheme, Orientation } from '../types'
 import type { UnistylesMiniRuntime, UnistylesRuntime as UnistylesRuntimeSpec } from './UnistylesRuntime.nitro'
 
-import { isAndroid, isIOS } from '../../common'
+import { isAndroid, isIOS, isMacOS } from '../../common'
 import { type UnistylesStatusBar, attachStatusBarJSMethods } from '../StatusBar'
 
 export interface UnistylesRuntimePrivate extends Omit<UnistylesRuntimeSpec, 'setRootViewBackgroundColor'> {
@@ -59,7 +59,7 @@ if (isIOS) {
         HybridUnistylesRuntime.statusBar.setHidden(isEnabled, 'fade')
 }
 
-if (isAndroid) {
+if (isAndroid || isMacOS) {
     HybridUnistylesRuntime.setImmersiveMode = HybridUnistylesRuntime.setImmersiveModeNative
 }
 
