@@ -20,6 +20,13 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
         }
     }
 
+    if (moduleName === 'react' || moduleName.startsWith('react/')) {
+        return {
+            type: 'sourceFile',
+            filePath: require.resolve(moduleName, { paths: [projectRoot] })
+        }
+    }
+
     if (
         platform === 'macos'
         && (moduleName === 'react-native' || moduleName.startsWith('react-native/'))

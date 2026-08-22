@@ -1,15 +1,32 @@
 #if os(macOS)
 
-import Foundation
+import AppKit
 import Combine
 
 extension NativeMacOSPlatform {
     func setupPlatformListeners() {
         let windowPublisher = NotificationCenter.default.publisher(for: NSNotification.Name("RCTWindowFrameDidChangeNotification"))
         let colorSchemePublisher = NotificationCenter.default.publisher(for: NSNotification.Name("RCTUserInterfaceStyleDidChangeNotification"))
+        let resizePublisher = NotificationCenter.default.publisher(for: NSWindow.didResizeNotification)
+        let keyWindowPublisher = NotificationCenter.default.publisher(for: NSWindow.didBecomeKeyNotification)
+        let screenPublisher = NotificationCenter.default.publisher(for: NSWindow.didChangeScreenNotification)
+        let backingPropertiesPublisher = NotificationCenter.default.publisher(for: NSWindow.didChangeBackingPropertiesNotification)
+        let enterFullScreenPublisher = NotificationCenter.default.publisher(for: NSWindow.didEnterFullScreenNotification)
+        let exitFullScreenPublisher = NotificationCenter.default.publisher(for: NSWindow.didExitFullScreenNotification)
+        let screenParametersPublisher = NotificationCenter.default.publisher(for: NSApplication.didChangeScreenParametersNotification)
 
         Publishers
-            .MergeMany([windowPublisher, colorSchemePublisher])
+            .MergeMany([
+                windowPublisher,
+                colorSchemePublisher,
+                resizePublisher,
+                keyWindowPublisher,
+                screenPublisher,
+                backingPropertiesPublisher,
+                enterFullScreenPublisher,
+                exitFullScreenPublisher,
+                screenParametersPublisher
+            ])
             .throttle(for: .milliseconds(25), scheduler: RunLoop.main, latest: true)
             .sink { [weak self] _ in
                 self?.onNativePlatformChange()

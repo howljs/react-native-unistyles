@@ -75,7 +75,20 @@ class NativeMacOSPlatform: HybridNativePlatformSpec {
     }
 
     func getFontScale() -> Double {
-        return 1
+        func getFontScaleFn() -> Double {
+            return MacOSRuntimeMetrics.fontScale(
+                systemFontSize: NSFont.systemFontSize,
+                defaultFontSize: 13
+            )
+        }
+
+        if Thread.isMainThread {
+            return getFontScaleFn()
+        }
+
+        return DispatchQueue.main.sync {
+            return getFontScaleFn()
+        }
     }
 
     func getScreenDimensions() -> Dimensions {

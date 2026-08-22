@@ -36,6 +36,22 @@ export const App = () => {
                 <Text testID="breakpoint-value" style={styles.value}>
                     Breakpoint: {rt.breakpoint ?? 'compact'}
                 </Text>
+                <Text testID="screen-value" style={styles.value}>
+                    Screen: {Math.round(rt.screen.width)} × {Math.round(rt.screen.height)}
+                </Text>
+                <Text testID="orientation-value" style={styles.value}>
+                    Orientation: {rt.isLandscape ? 'landscape' : 'portrait'}
+                </Text>
+                <Text testID="pixel-ratio-value" style={styles.value}>
+                    Pixel ratio: {rt.pixelRatio.toFixed(2)}
+                </Text>
+                <Text testID="font-scale-value" style={styles.value}>
+                    Font scale: {rt.fontScale.toFixed(2)}
+                </Text>
+                <Text testID="insets-value" style={styles.value}>
+                    Insets: {rt.insets.top.toFixed(0)}, {rt.insets.right.toFixed(0)}, {rt.insets.bottom.toFixed(0)},{' '}
+                    {rt.insets.left.toFixed(0)}
+                </Text>
                 <View testID="variant-style" style={styles.variant}>
                     <Text style={styles.variantText}>Large variant</Text>
                 </View>
