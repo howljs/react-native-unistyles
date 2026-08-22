@@ -2,6 +2,7 @@ require "json"
 require_relative './unistyles_get_rn_version.rb'
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
+macos_deployment_target = defined?(min_macos_version_supported) ? min_macos_version_supported : "14.0"
 
 Pod::Spec.new do |s|
   s.name         = "Unistyles"
@@ -13,8 +14,7 @@ Pod::Spec.new do |s|
 
   s.platforms    = {
     :ios => min_ios_version_supported,
-    :macos => "14.0",
-    :osx => "14.0"
+    :osx => macos_deployment_target
   }
   s.source       = { :git => package["repository"], :tag => "#{s.version}" }
 
